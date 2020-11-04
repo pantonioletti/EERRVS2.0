@@ -1,0 +1,140 @@
+﻿<Window x:Class="EstadoResultadoRCL.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EstadoResultadoRCL"
+        mc:Ignorable="d"
+        Title="Procesamiento de Estado Resultado"
+        Height="540.594"
+        Width="663.97">
+    <Grid Margin="0,0,20,7">
+        <Menu
+            Width="337"
+            Grid.Column="0"
+            Grid.Row="0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Stretch"
+            Margin="-4,-2,0,462.333333333333">
+            <MenuItem
+                x:Name="mnData"
+                Header="Data"
+                RenderTransformOrigin="0.5,0.5">
+                <MenuItem
+                    x:Name="mnItem"
+                    Header="Items"
+                    HorizontalAlignment="Left"
+                    Click="mnItem_Click" />
+                <MenuItem
+                    x:Name="mnLineas"
+                    Header="Líneas de Estado Resultado"
+                    HorizontalAlignment="Left" />
+                <MenuItem
+                    x:Name="mnAreas"
+                    Header="Areas"
+                    HorizontalAlignment="Left"
+                    Click="mnAreas_Click" />
+            </MenuItem>
+            <MenuItem
+                x:Name="mnConfig"
+                Header="Configuración"
+                Click="mnConfig_Click"
+                RenderTransformOrigin="0.5,0.5" />
+            <MenuItem
+                x:Name="mnCtaAnalisis"
+                Header="Cuenta análisis"
+                Click="mnCtaAnalisis_Click"
+                RenderTransformOrigin="0.5,0.5" />
+            <MenuItem
+                x:Name="mnCtasCltes"
+                Header="Cuentas clientes"
+                Click="mnCtasCltes_Click"
+                RenderTransformOrigin="0.5,0.5" />
+        </Menu>
+        <TextBox
+            x:Name="PathIn"
+            HorizontalAlignment="Left"
+            Height="28"
+            Margin="120,48,0,0"
+            TextWrapping="Wrap"
+            VerticalAlignment="Top"
+            Width="490"
+            IsEnabled="False" />
+        <Button
+            x:Name="PathInBtn"
+            Content="Ruta Entrada"
+            Click="btnPathIn_Click"
+            HorizontalAlignment="Left"
+            Height="28"
+            Margin="10,48,0,0"
+            VerticalAlignment="Top"
+            Width="99" />
+        <TextBox
+            x:Name="PathOut"
+            HorizontalAlignment="Left"
+            Height="28"
+            Margin="120,85,0,0"
+            TextWrapping="Wrap"
+            VerticalAlignment="Top"
+            Width="490"
+            IsEnabled="False" />
+        <Button
+            x:Name="PathOutBtn"
+            Content="Ruta Salida"
+            Click="btnPathOut_Click"
+            HorizontalAlignment="Left"
+            Height="28"
+            Margin="10,85,0,0"
+            VerticalAlignment="Top"
+            Width="99" />
+        <ListBox
+            x:Name="ListInputFiles"
+            HorizontalAlignment="Left"
+            Margin="10,194,0,10"
+            Width="443"
+            SelectionMode="Multiple" />
+        <Button
+            Content="Procesar"
+            x:Name="ProcBtn"
+            Click="btnProc_Click"
+            HorizontalAlignment="Left"
+            Height="32"
+            Margin="10,158,0,0"
+            VerticalAlignment="Top"
+            Width="443" />
+        <TextBox
+            x:Name="FileOut"
+            HorizontalAlignment="Left"
+            Height="28"
+            Margin="120,121,0,0"
+            TextWrapping="Wrap"
+            VerticalAlignment="Top"
+            Width="490"
+            IsEnabled="False" />
+        <Label
+            Content="Archivo de Salida"
+            HorizontalAlignment="Left"
+            Height="28"
+            Margin="10,121,0,0"
+            VerticalAlignment="Top"
+            Width="105" />
+        <CheckBox
+            x:Name="chkApplyRate"
+            Click="chkApplyRate_Click"
+            Content="Aplicar tipo de cambio"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Checked="chkApplyRate_Checked"
+            Margin="486,174,0,0" />
+        <TextBox
+            x:Name="txtExchgRate"
+            HorizontalAlignment="Right"
+            Height="23"
+            Margin="0,194,10,0"
+            TextWrapping="Wrap"
+            VerticalAlignment="Top"
+            Width="139"
+            TextChanged="txtExchgRate_TextChanged"
+            IsEnabled="False" />
+    </Grid>
+</Window>
