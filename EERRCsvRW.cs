@@ -1,39 +1,37 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 
-namespace EstadoResultadoRCL
+namespace EstadoResultadoWPF
 {
     /*
-      *  +---------------+----------+----------+
-      *  |               | Input    | Output   |
-      *  |   Type        | Position | Position |
-      *  +---------------+----------+----------+
-         | date          |    1     |  10      |
-         | compte        |    2     |  11      |
-         | type          |    3     |  12      |
-         | comment       |    4     |  13      |
-         | area          |    5     |  14*     |
-         | cost_center   |    6     |  15      |
-         | item          |    7     |  16*     |
-         | eff_date      |    8     |  18      |
-         | analisys_date |    9     |  19      |
-         | reference     |   10     |  20      |
-         | ref_date      |   11     |  21      |
-         | exp_date      |   12     |  22      |
-         | debit         |   13     |  23      |
-         | credit        |   14     |  24      |
-         | balance       |   15     |  25      |
-         | branch        |   16     |  26      |
-      *  +---------------+----------+----------+
-      */
+     *  +---------------+----------+----------+
+     *  |               | Input    | Output   |
+     *  |   Type        | Position | Position |
+     *  +---------------+----------+----------+
+        | date          |    1     |  10      |
+        | compte        |    2     |  11      |
+        | type          |    3     |  12      |
+        | comment       |    4     |  13      |
+        | area          |    5     |  14*     |
+        | cost_center   |    6     |  15      |
+        | item          |    7     |  16*     |
+        | eff_date      |    8     |  18      |
+        | analisys_date |    9     |  19      |
+        | reference     |   10     |  20      |
+        | ref_date      |   11     |  21      |
+        | exp_date      |   12     |  22      |
+        | debit         |   13     |  23      |
+        | credit        |   14     |  24      |
+        | balance       |   15     |  25      |
+        | branch        |   16     |  26      |
+     *  +---------------+----------+----------+
+     */
     class EERRCsvRW
     {
         const int C_IN_DATE = 1;
@@ -82,7 +80,7 @@ namespace EstadoResultadoRCL
         const string C_COL_DEBIT = "W";
         const string C_COL_CREDIT = "X";
 
-        string[] months = { "ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE" };
+        string[] months ={ "ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE" };
 
         const string C_STR_IN_HEAD = "RCL SUDAMERICANA SOCIEDAD ANONIMA";
         const string C_STR_IN_ACCOUNT = "Cuenta Contable";
@@ -95,58 +93,54 @@ namespace EstadoResultadoRCL
 
         private String getCellValue(ICell c)
         {
-            String retVal = "";
-            if (c != null)
-                retVal = c.ToString();
-
-            return retVal;
+        	String retVal = "";
+        	if (c != null)
+        		retVal = c.ToString();
+        	
+        	return retVal;
         }
-
+        
         private String getMonth(ICell c)
         {
-
-            String retVal = "";
-            if (c != null)
-            {
-                if (c.CellType == CellType.Numeric)
-                {
-                    if (DateUtil.IsCellDateFormatted(c))
-                    {
-                        DateTime dt = c.DateCellValue;
-                        retVal = months[dt.Month - 1];
-                    }
-                    else
-                        retVal = c.NumericCellValue.ToString();
-                }
-                else if (c.CellType == CellType.String)
-                    retVal = getCellValue(c);
-            }
-
-            return retVal;
+        	
+        	String retVal = "";
+        	if (c != null)
+        	{
+        		if (c.CellType == CellType.Numeric){
+        			if (DateUtil.IsCellDateFormatted(c)){
+        				DateTime dt = c.DateCellValue;
+        				retVal = months[dt.Month-1];
+        			}
+        			else
+        				retVal = c.NumericCellValue.ToString();
+        		}
+        		else if (c.CellType == CellType.String)
+        			retVal = getCellValue(c);
+        	}
+        	
+        	return retVal;
         }
-
+        
         private String getCellDateValue(ICell c)
         {
-            String retVal = "";
-            if (c != null)
-            {
-                if (c.CellType == CellType.Numeric)
-                {
-                    if (DateUtil.IsCellDateFormatted(c))
-                    {
-                        DateTime dt = c.DateCellValue;
-                        retVal = (dt.Day < 10 ? "0" : "") + dt.Day.ToString() + "-";
-                        retVal += (dt.Month < 10 ? "0" : "") + dt.Month.ToString() + "-";
-                        retVal += dt.Year;
-                    }
-                    else
-                        retVal = c.NumericCellValue.ToString();
-                }
-                else if (c.CellType == CellType.String)
-                    retVal = getCellValue(c);
-            }
-
-            return retVal;
+        	String retVal = "";
+        	if (c != null)
+        	{
+        		if (c.CellType == CellType.Numeric){
+        			if (DateUtil.IsCellDateFormatted(c)){
+        				DateTime dt = c.DateCellValue;
+        				retVal = (dt.Day<10?"0":"") + dt.Day.ToString() + "-";
+        				retVal += (dt.Month<10?"0":"") + dt.Month.ToString() + "-";
+        				retVal += dt.Year;
+        			}
+        			else
+        				retVal = c.NumericCellValue.ToString();
+        		}
+        		else if (c.CellType == CellType.String)
+        			retVal = getCellValue(c);
+        	}
+        	
+        	return retVal;
         }
 
 
@@ -155,12 +149,12 @@ namespace EstadoResultadoRCL
             StringBuilder retVal = new StringBuilder("");
             //XSSFWorkbook wb;
             IWorkbook wb = null;
-
+            
             FileInfo fi = new FileInfo(file);
             if (file.EndsWith(".xlsx"))
-                wb = new XSSFWorkbook(fi);
+            	wb = new XSSFWorkbook(fi);
             else if (file.EndsWith(".xls"))
-                wb = new HSSFWorkbook(new FileStream(file, FileMode.Open));
+            	wb = new HSSFWorkbook(new FileStream(file, FileMode.Open));
 
             ISheet sheet = wb.GetSheetAt(0);
             IRow r = sheet.GetRow(0);
@@ -184,17 +178,17 @@ namespace EstadoResultadoRCL
                             acct = acct.Substring(C_STR_IN_ACCOUNT.Length).Trim();
                             int pos = acct.IndexOf(' ');
                             acctDesc = acct.Substring(pos + 1).Trim();
-                            acct = acct.Substring(0, pos).Trim();
+                            acct = acct.Substring(0,pos).Trim();
                             Console.WriteLine("Account: " + acct + " " + acctDesc);
                         }
                         else if (acct.Length > 0 && r.LastCellNum >= 16)
                         {
-
+                            
                             //"Estado" 1,"Empresa" 2,"Agrupacion" 3,"Marca," 4,"EERR" 5,"Detalle EERR" 6,"Cuenta" 7,"Desc Cuenta" 8,
                             //"Mes" 9,"Fecha" 10,"# Compte" 11,"Tipo;Glosa" 12,"Area" 13,"C.Costo" 14,"Item" 15,"Desc Item" 16, "F.Efec" 17,
                             //"Analisis" 18,"Refer" 19,"Fch Ref" 20,"Fch Vto" 21,"DEBE" 22,"HABER" 23,"SALDO" 24,"Sucursal" 25
                             string s = "";
-                            XSSFRow row = (XSSFRow)sh.CreateRow(sh.LastRowNum + 1);
+                            XSSFRow row = (XSSFRow)sh.CreateRow(sh.LastRowNum+1);
 
                             XSSFCell cell = (XSSFCell)row.CreateCell(C_OUT_STAT - 1);
                             cell.SetCellValue(C_DATA_STATUS);
@@ -204,10 +198,15 @@ namespace EstadoResultadoRCL
                             c = r.GetCell(C_IN_AREA - 1);
                             cell = (XSSFCell)row.CreateCell(C_OUT_DESC_AREA - 1);
                             cell.SetCellValue(eerr.getAgrupacion(c.ToString()));
+
+
+                            String[] eerr_desc_grupo = eerr.getLinea(acct);
                             cell = (XSSFCell)row.CreateCell(C_OUT_BRAND - 1);
-                            cell.SetCellValue(eerr.getBrand(getCellValue(c)));
+                            cell.SetCellValue(eerr_desc_grupo[1] != null ? eerr_desc_grupo[1] : eerr.getBrand(getCellValue(c)));
+                            cell = (XSSFCell)row.CreateCell(C_OUT_EERR - 1);
+                            cell.SetCellValue(eerr_desc_grupo[2]);
                             cell = (XSSFCell)row.CreateCell(C_OUT_DET_EERR - 1);
-                            cell.SetCellValue(eerr.getLinea(acct));
+                            cell.SetCellValue(eerr_desc_grupo[0]);
                             cell = (XSSFCell)row.CreateCell(C_OUT_ACCT_NUM - 1);
                             cell.SetCellValue(acct);
                             cell = (XSSFCell)row.CreateCell(C_OUT_ACCT_DESC - 1);
@@ -215,8 +214,8 @@ namespace EstadoResultadoRCL
 
                             c = r.GetCell(C_IN_DATE - 1);
                             cell = (XSSFCell)row.CreateCell(C_OUT_DATE - 1);
-
-
+                            
+                            
                             cell.SetCellValue(getCellDateValue(c));
 
                             cell = (XSSFCell)row.CreateCell(C_OUT_MONTH - 1);
@@ -280,10 +279,10 @@ namespace EstadoResultadoRCL
                                 if (!string.IsNullOrEmpty(s) && Double.TryParse(s, out v))
                                 {
                                     //cell = (XSSFCell)row.CreateCell(C_OUT_DEBIT - 1);
-                                    cell.SetCellValue((applyRate ? rate : 1) * v);
+                                    cell.SetCellValue((applyRate?rate:1)*v);
                                     cell.SetCellType(CellType.Numeric);
                                     cell.CellStyle.DataFormat = doubleFormat;
-
+                                    
                                 }
                             }
 
@@ -311,7 +310,7 @@ namespace EstadoResultadoRCL
                                     cell = (XSSFCell)row.CreateCell(C_OUT_BALANCE - 1);
                                     cell.SetCellValue((applyRate ? rate : 1) * v);
                                     cell.SetCellType(CellType.Formula);
-                                    cell.SetCellFormula(String.Format("{0}{1}-{2}{3}", C_COL_DEBIT, cell.Row.RowNum + 1, C_COL_CREDIT, cell.Row.RowNum + 1));
+                                    cell.SetCellFormula(String.Format("{0}{1}-{2}{3}", C_COL_DEBIT, cell.Row.RowNum+1, C_COL_CREDIT, cell.Row.RowNum+1));
                                     cell.CellStyle.DataFormat = doubleFormat;
                                 }
                             }
@@ -323,9 +322,9 @@ namespace EstadoResultadoRCL
                                 {
                                     cell = (XSSFCell)row.CreateCell(C_OUT_BRANCH - 1);
                                     cell.SetCellValue(eerr.getSucursal(s));
-
+                                
                                 }
-
+                                
                             }
                         }
                     }
@@ -333,9 +332,9 @@ namespace EstadoResultadoRCL
                 }
             }
             return retVal;
-
+        	
         }
-
+        	
         public StringBuilder readXls(string file, EERRDataAndMethods eerr, XSSFWorkbook twb, bool applyRate, Double rate)
         {
             StringBuilder retVal = new StringBuilder("");
@@ -364,17 +363,17 @@ namespace EstadoResultadoRCL
                             acct = acct.Substring(C_STR_IN_ACCOUNT.Length).Trim();
                             int pos = acct.IndexOf(' ');
                             acctDesc = acct.Substring(pos + 1).Trim();
-                            acct = acct.Substring(0, pos).Trim();
+                            acct = acct.Substring(0,pos).Trim();
                             Console.WriteLine("Account: " + acct + " " + acctDesc);
                         }
                         else if (acct.Length > 0 && r.LastCellNum >= 16)
                         {
-
+                            
                             //"Estado" 1,"Empresa" 2,"Agrupacion" 3,"Marca," 4,"EERR" 5,"Detalle EERR" 6,"Cuenta" 7,"Desc Cuenta" 8,
                             //"Mes" 9,"Fecha" 10,"# Compte" 11,"Tipo;Glosa" 12,"Area" 13,"C.Costo" 14,"Item" 15,"Desc Item" 16, "F.Efec" 17,
                             //"Analisis" 18,"Refer" 19,"Fch Ref" 20,"Fch Vto" 21,"DEBE" 22,"HABER" 23,"SALDO" 24,"Sucursal" 25
                             string s = "";
-                            XSSFRow row = (XSSFRow)sh.CreateRow(sh.LastRowNum + 1);
+                            XSSFRow row = (XSSFRow)sh.CreateRow(sh.LastRowNum+1);
 
                             XSSFCell cell = (XSSFCell)row.CreateCell(C_OUT_STAT - 1);
                             cell.SetCellValue(C_DATA_STATUS);
@@ -384,10 +383,13 @@ namespace EstadoResultadoRCL
                             c = r.GetCell(C_IN_AREA - 1);
                             cell = (XSSFCell)row.CreateCell(C_OUT_DESC_AREA - 1);
                             cell.SetCellValue(eerr.getAgrupacion(c.ToString()));
+                            String[] eerr_desc_grupo = eerr.getLinea(acct);
                             cell = (XSSFCell)row.CreateCell(C_OUT_BRAND - 1);
-                            cell.SetCellValue(eerr.getBrand(getCellValue(c)));
+                            cell.SetCellValue(eerr_desc_grupo[1] != null? eerr_desc_grupo[1]:eerr.getBrand(getCellValue(c)));
+                            cell = (XSSFCell)row.CreateCell(C_OUT_EERR - 1);
+                            cell.SetCellValue(eerr_desc_grupo[2]);
                             cell = (XSSFCell)row.CreateCell(C_OUT_DET_EERR - 1);
-                            cell.SetCellValue(eerr.getLinea(acct));
+                            cell.SetCellValue(eerr_desc_grupo[0]);
                             cell = (XSSFCell)row.CreateCell(C_OUT_ACCT_NUM - 1);
                             cell.SetCellValue(acct);
                             cell = (XSSFCell)row.CreateCell(C_OUT_ACCT_DESC - 1);
@@ -395,8 +397,8 @@ namespace EstadoResultadoRCL
 
                             c = r.GetCell(C_IN_DATE - 1);
                             cell = (XSSFCell)row.CreateCell(C_OUT_DATE - 1);
-
-
+                            
+                            
                             cell.SetCellValue(getCellDateValue(c));
 
                             cell = (XSSFCell)row.CreateCell(C_OUT_MONTH - 1);
@@ -460,10 +462,10 @@ namespace EstadoResultadoRCL
                                 if (!string.IsNullOrEmpty(s) && Double.TryParse(s, out v))
                                 {
                                     //cell = (XSSFCell)row.CreateCell(C_OUT_DEBIT - 1);
-                                    cell.SetCellValue((applyRate ? rate : 1) * v);
+                                    cell.SetCellValue((applyRate?rate:1)*v);
                                     cell.SetCellType(CellType.Numeric);
                                     cell.CellStyle.DataFormat = doubleFormat;
-
+                                    
                                 }
                             }
 
@@ -491,7 +493,7 @@ namespace EstadoResultadoRCL
                                     cell = (XSSFCell)row.CreateCell(C_OUT_BALANCE - 1);
                                     cell.SetCellValue((applyRate ? rate : 1) * v);
                                     cell.SetCellType(CellType.Formula);
-                                    cell.SetCellFormula(String.Format("{0}{1}-{2}{3}", C_COL_DEBIT, cell.Row.RowNum + 1, C_COL_CREDIT, cell.Row.RowNum + 1));
+                                    cell.SetCellFormula(String.Format("{0}{1}-{2}{3}", C_COL_DEBIT, cell.Row.RowNum+1, C_COL_CREDIT, cell.Row.RowNum+1));
                                     cell.CellStyle.DataFormat = doubleFormat;
                                 }
                             }
@@ -512,11 +514,6 @@ namespace EstadoResultadoRCL
             }
             return retVal;
         }
-
-    }
-
-    class AnalisisXlRW
-    {
 
     }
 }

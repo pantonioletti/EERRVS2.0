@@ -1,0 +1,1 @@
+EstadoResultadoRCL.exe C:\dev\projects\ScriptsUtil\conf\rcl\rcl_format.ini

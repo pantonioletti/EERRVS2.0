@@ -1,44 +1,51 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿/*
+ * Created by SharpDevelop.
+ * User: pantonio
+ * Date: 2/29/2016
+ * Time: 1:15 PM
+ * 
+ * To change this template use Tools | Options | Coding | Edit Standard Headers.
+ */
+using System;
 using System.Data;
 using System.Data.SQLite;
 using System.Collections;
+using System.Collections.Generic;
 
-namespace EstadoResultadoRCL
+namespace EstadoResultadoWPF
 {
-    public class ConfigModel
-    {
+	/// <summary>
+	/// Description of ConfigModel.
+	/// </summary>
+	public class ConfigModel
+	{
         private static string QUERY_ITEMS = "select cod, desc from items;";
         private static string QUERY_AREA = "select area, marca, agrupacion from area;";
-        private static string QUERY_EERR = "select length(prefix) l, prefix, desc from eerr order by l asc, prefix asc;";
+        private static string QUERY_EERR = "select length(prefix) l, prefix, desc, grupo, eerr from eerr order by l asc, prefix asc;";
         private static string QUERY_SUCURSAL = "select cod, desc from sucursal;";
 
         private SQLiteDataAdapter ad;
-        private SQLiteConnection sqlite = null;
+        private SQLiteConnection sqlite=null;
         private string dbFile;
 
         private SQLiteConnection getConnection()
         {
-            SQLiteConnection retVal = null;
-            if (sqlite == null || sqlite.State == ConnectionState.Broken || sqlite.State == ConnectionState.Closed)
-                sqlite = new SQLiteConnection("Data Source=" + dbFile);
-            if (sqlite.State != ConnectionState.Open)
-                sqlite.Open();
-
-            retVal = sqlite;
-            return retVal;
-
+        	SQLiteConnection retVal = null;
+        	if (sqlite == null || sqlite.State == ConnectionState.Broken || sqlite.State == ConnectionState.Closed)
+        		sqlite = new SQLiteConnection("Data Source=" + dbFile);
+        	if (sqlite.State != ConnectionState.Open)
+        		sqlite.Open();
+        	
+        	retVal = sqlite;
+        	return retVal;
+        		
         }
-
-        public Dictionary<string, string> getBranchs()
+        
+        public Dictionary<string,string> getBranchs()
         {
-            Dictionary<string, string> branchs = new Dictionary<string, string>();
-            SQLiteConnection conn = getConnection();
-            System.Data.DataTable dt = new System.Data.DataTable();
+        	Dictionary<string,string> branchs = new Dictionary<string,string>();
+        	SQLiteConnection conn = getConnection();
+        	System.Data.DataTable dt = new System.Data.DataTable();
             try
             {
                 SQLiteCommand cmd;
@@ -64,15 +71,15 @@ namespace EstadoResultadoRCL
             }
             sqlite = null;
             return branchs;
-
+        	
         }
 
 
-        public Dictionary<string, string> getItems()
+        public Dictionary<string,string> getItems()
         {
-            Dictionary<string, string> items = new Dictionary<string, string>();
-            SQLiteConnection conn = getConnection();
-            System.Data.DataTable dt = new System.Data.DataTable();
+        	Dictionary<string,string> items = new Dictionary<string,string>();
+        	SQLiteConnection conn = getConnection();
+        	System.Data.DataTable dt = new System.Data.DataTable();
             try
             {
                 SQLiteCommand cmd;
@@ -98,21 +105,20 @@ namespace EstadoResultadoRCL
             }
             sqlite = null;
             return items;
-
+        	
         }
-
+ 
         public int execQueries(List<string> stmts)
         {
-            int retVal = 0;
-            SQLiteConnection conn = getConnection();
+        	int retVal = 0;
+        	SQLiteConnection conn = getConnection();
             try
             {
                 SQLiteCommand cmd;
                 cmd = conn.CreateCommand();
-                foreach (string stmt in stmts)
-                {
-                    cmd.CommandText = stmt;
-                    retVal += cmd.ExecuteNonQuery();
+                foreach(string stmt in stmts){
+	                cmd.CommandText = stmt;
+	                retVal += cmd.ExecuteNonQuery();
                 }
 
             }
@@ -122,14 +128,14 @@ namespace EstadoResultadoRCL
                 retVal = -1;
             }
             return retVal;
-
+        	
         }
-
-        public Dictionary<string, string[]> getAreas()
+        
+        public Dictionary<string,string[]> getAreas()
         {
-            Dictionary<string, string[]> areas = new Dictionary<string, string[]>();
-            SQLiteConnection conn = getConnection();
-            System.Data.DataTable dt = new System.Data.DataTable();
+        	Dictionary<string,string[]> areas = new Dictionary<string,string[]>();
+        	SQLiteConnection conn = getConnection();
+        	System.Data.DataTable dt = new System.Data.DataTable();
             try
             {
                 SQLiteCommand cmd;
@@ -157,16 +163,16 @@ namespace EstadoResultadoRCL
                 System.Windows.Forms.MessageBox.Show(ex.Message);
             }
             sqlite = null;
-
+            
             return areas;
-
+        	
         }
 
         public ArrayList getEERRs()
         {
-            ArrayList eerrs = new ArrayList();
-            SQLiteConnection conn = getConnection();
-            System.Data.DataTable dt = new System.Data.DataTable();
+        	ArrayList eerrs = new ArrayList();
+        	SQLiteConnection conn = getConnection();
+        	System.Data.DataTable dt = new System.Data.DataTable();
             try
             {
                 SQLiteCommand cmd;
@@ -180,9 +186,11 @@ namespace EstadoResultadoRCL
                 DataRow[] rows = dt.Select();
                 for (int i = 0; i < rows.Length; i++)
                 {
-                    string[] prefix_desc = new string[2];
+                    string[] prefix_desc = new string[4];
                     prefix_desc[0] = (string)rows[i][Constants.EERR_1];
                     prefix_desc[1] = (string)rows[i][Constants.EERR_2];
+                    prefix_desc[2] = (string)rows[i][Constants.EERR_3];
+                    prefix_desc[3] = (string)rows[i][Constants.EERR_4];
                     eerrs.Add(prefix_desc);
                 }
                 ad.Dispose();
@@ -195,14 +203,14 @@ namespace EstadoResultadoRCL
             }
             sqlite = null;
             return eerrs;
-
+        	
         }
 
-
+        
         public ConfigModel(string db_file)
-        {
-            dbFile = db_file;
-            sqlite = getConnection();
+		{
+        	dbFile = db_file;
+        	sqlite = getConnection();
             System.Data.DataTable dt = new System.Data.DataTable();
 
             /*try
@@ -227,12 +235,12 @@ namespace EstadoResultadoRCL
                 System.Windows.Forms.MessageBox.Show(ex.Message);
             }
             sqlite.Close();*/
-
-        }
+            
+		}
         ~ConfigModel()
         {
-            if (sqlite != null && sqlite.State != ConnectionState.Broken && sqlite.State != ConnectionState.Closed)
-                sqlite.Close();
+        	if (sqlite != null && sqlite.State != ConnectionState.Broken && sqlite.State != ConnectionState.Closed)
+        		sqlite.Close();
         }
-    }
+	}
 }
